@@ -28,6 +28,7 @@ public class Wget implements Runnable {
                     if (delta < speed) {
                         Thread.sleep(speed - delta);
                     }
+                    start = System.currentTimeMillis();
                 }
             }
         } catch (IOException | InterruptedException e) {
@@ -36,8 +37,14 @@ public class Wget implements Runnable {
     }
 
     public static void main(String[] args) throws InterruptedException {
-        String url = args[0];
-        int speed = Integer.parseInt(args[1]);
+        String url;
+        int speed;
+        try {
+            url = args[0];
+            speed = Integer.parseInt(args[1]);
+        } catch (Exception e) {
+            throw new IllegalArgumentException("Enter all arguments");
+        }
         Thread wget = new Thread(new Wget(url, speed));
         wget.start();
         wget.join();
