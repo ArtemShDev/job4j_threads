@@ -5,7 +5,6 @@ public final class Cache {
     private static Cache cache;
 
     public synchronized static Cache instOf() {
-        System.out.println(cache);
         if (cache == null) {
             cache = new Cache();
         }
