@@ -13,7 +13,7 @@ public final class ParseFile {
 
     public String getContent(Predicate<Character> filter) throws IOException {
         StringBuilder sb = new StringBuilder();
-        try(InputStream i = new BufferedInputStream(new FileInputStream(file))) {
+        try (InputStream i = new BufferedInputStream(new FileInputStream(file))) {
             int readByte;
             while ((readByte = i.read()) != -1) {
                 if (filter.test((char) readByte)) {
