@@ -2,10 +2,10 @@ package ru.job4j.ref;
 
 import net.jcip.annotations.ThreadSafe;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.Collectors;
 
 @ThreadSafe
 public class UserCache {
@@ -21,7 +21,8 @@ public class UserCache {
     }
 
     public List<User> findAll() {
-        return users.values().stream().peek(u ->
-                User.of(u.getName())).collect(Collectors.toList());
+        List<User> userList = new ArrayList<>();
+        users.values().forEach(u -> userList.add(User.of(u.getName())));
+        return userList;
     }
 }
