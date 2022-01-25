@@ -39,6 +39,10 @@ public class SimpleBlockingQueue<T> {
         }
     }
 
+    public synchronized boolean isEmpty() {
+        return queue.isEmpty();
+    }
+
     public static void main(String[] args) {
         SimpleBlockingQueue<Integer> sbq = new SimpleBlockingQueue<>(5);
         Random random = new Random();
