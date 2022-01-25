@@ -36,6 +36,19 @@ public class UserStoreTest {
     }
 
     @Test
+    public void whenDelete() throws InterruptedException {
+        User userTo = new User(1, 300);
+        UserStore userStore = new UserStore();
+        Thread threadTo = new Thread(() -> userStore.add(userTo));
+        Thread threadDel = new Thread(() -> userStore.delete(userTo));
+        threadTo.start();
+        threadTo.join();
+        threadDel.start();
+        threadDel.join();
+        assertThat(userStore.getUsers().size(), is(0));
+    }
+
+    @Test
     public void whenTransferOK() throws InterruptedException {
         User userFrom = new User(1, 500);
         User userTo = new User(2, 300);

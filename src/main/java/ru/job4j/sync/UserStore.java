@@ -11,8 +11,7 @@ public class UserStore {
     private final ConcurrentHashMap<Integer, User> users = new ConcurrentHashMap<>();
 
     public synchronized boolean add(User user) {
-        users.putIfAbsent(user.getId(), user);
-        return true;
+        return users.putIfAbsent(user.getId(), user) == null;
     }
 
     public synchronized boolean update(User user) {
@@ -29,7 +28,6 @@ public class UserStore {
         if (userFrom != null && userTo != null && userFrom.getAmount() >= amount) {
             userFrom.setAmount(userFrom.getAmount() - amount);
             userTo.setAmount(userTo.getAmount() + amount);
-            update(userTo);
         }
     }
 
