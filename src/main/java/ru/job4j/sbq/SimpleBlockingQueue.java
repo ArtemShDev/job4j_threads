@@ -12,54 +12,52 @@ public class SimpleBlockingQueue<T> {
 
     @GuardedBy("this")
     private Queue<T> queue = new LinkedList<>();
-    private int capacity = 5;
+    private int capacity;
 
-    public void offer(T value) {
+    public SimpleBlockingQueue(int capacity) {
+        this.capacity = capacity;
+    }
+
+    public void offer(T value) throws InterruptedException {
         synchronized (this) {
-            System.out.println("Thread producer " + Thread.currentThread().getName() + " starts");
             while (queue.size() == capacity) {
-                try {
-                    System.out.println("Thread producer " + Thread.currentThread().getName() + " is waiting ...");
-                    this.wait();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+                this.wait();
             }
             queue.offer(value);
             this.notify();
-            System.out.println("Thread producer " + Thread.currentThread().getName() + " ends");
         }
     }
 
-    public T poll() {
+    public T poll() throws InterruptedException {
         synchronized (this) {
-            System.out.println("Thread consumer " + Thread.currentThread().getName() + " starts");
             while (queue.size() == 0) {
-                try {
-                    System.out.println("Thread consumer " + Thread.currentThread().getName() + " is waiting ...");
-                    this.wait();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+                this.wait();
             }
             T value = queue.poll();
             this.notify();
-            System.out.println("Thread consumer " + Thread.currentThread().getName() + " ends");
             return value;
         }
     }
 
     public static void main(String[] args) {
-        SimpleBlockingQueue<Integer> sbq = new SimpleBlockingQueue<>();
+        SimpleBlockingQueue<Integer> sbq = new SimpleBlockingQueue<>(5);
         Random random = new Random();
         Runnable producer = () -> {
             while (true) {
-                sbq.offer(random.nextInt(5));
+                try {
+                    sbq.offer(random.nextInt(5));
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
         };
         Runnable consumer = () -> {
             while (true) {
-                sbq.poll();
+                try {
+                    sbq.poll();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
         };
         new Thread(producer).start();
