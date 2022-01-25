@@ -8,9 +8,9 @@ import java.util.concurrent.atomic.AtomicReference;
 public class CASCount {
 
     private final AtomicReference<Integer> count = new AtomicReference<>(0);
-    int lastCount;
 
     public void increment() {
+        int lastCount;
         do {
             lastCount = count.get();
         } while (!count.compareAndSet(lastCount, lastCount + 1));
