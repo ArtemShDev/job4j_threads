@@ -19,8 +19,16 @@ public class SearchInArray<T> extends RecursiveTask<Integer> {
 
     @Override
     protected Integer compute() {
+        if (to - from <= 10) {
+           for (int o = from; o <= to; o++) {
+               if (obj.equals(array[o])) {
+                   return o;
+               }
+           }
+            return -1;
+        }
         if (from == to) {
-            if (array[from] == obj) {
+            if (obj.equals(array[from])) {
                 return from;
             }
             return -1;
@@ -35,9 +43,8 @@ public class SearchInArray<T> extends RecursiveTask<Integer> {
         return Math.max(left, right);
     }
 
-    public static void main(String[] args) {
-        Integer[] array = {2, 4, 4, 15, 78, 45, 77, 88, 92, 75, 32, 65, 42};
+    public static Object sort(Object[] array, Object obj) {
         ForkJoinPool forkJoinPool = new ForkJoinPool();
-        System.out.println(forkJoinPool.invoke(new SearchInArray(array, 0, array.length - 1, 92)));
+        return forkJoinPool.invoke(new SearchInArray(array, 0, array.length - 1, obj));
     }
 }
